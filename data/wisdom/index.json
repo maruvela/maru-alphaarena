@@ -1,0 +1,136 @@
+{
+  "generated_at": "2026-09-01T17:25:03",
+  "mode": "full",
+  "documents": [
+    {
+      "doc_id": "buffett_1983",
+      "member": "buffett",
+      "source": "data\\raw\\buffett\\buffett_1983.html",
+      "output": "data\\wisdom\\buffett\\buffett_1983.md",
+      "original_paragraphs": 843,
+      "selected_paragraphs": 843,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "buffett_1991",
+      "member": "buffett",
+      "source": "data\\raw\\buffett\\buffett_1991.html",
+      "output": "data\\wisdom\\buffett\\buffett_1991.md",
+      "original_paragraphs": 821,
+      "selected_paragraphs": 821,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "buffett_1992",
+      "member": "buffett",
+      "source": "data\\raw\\buffett\\buffett_1992.html",
+      "output": "data\\wisdom\\buffett\\buffett_1992.md",
+      "original_paragraphs": 1048,
+      "selected_paragraphs": 1048,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "buffett_2007",
+      "member": "buffett",
+      "source": "data\\raw\\buffett\\buffett_2007.pdf",
+      "output": "data\\wisdom\\buffett\\buffett_2007.md",
+      "original_paragraphs": 183,
+      "selected_paragraphs": 183,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "lynch_mpr_1993",
+      "member": "lynch",
+      "source": "data\\raw\\lynch\\lynch_mpr_1993.html",
+      "output": "data\\wisdom\\lynch\\lynch_mpr_1993.md",
+      "original_paragraphs": 7,
+      "selected_paragraphs": 7,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "lynch_pbs_frontline",
+      "member": "lynch",
+      "source": "data\\raw\\lynch\\lynch_pbs_frontline.html",
+      "output": "data\\wisdom\\lynch\\lynch_pbs_frontline.md",
+      "original_paragraphs": 104,
+      "selected_paragraphs": 104,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "marks_i_beg_to_differ",
+      "member": "marks",
+      "source": "data\\raw\\marks\\marks_i_beg_to_differ.html",
+      "output": "data\\wisdom\\marks\\marks_i_beg_to_differ.md",
+      "original_paragraphs": 124,
+      "selected_paragraphs": 124,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "marks_illusion_of_knowledge",
+      "member": "marks",
+      "source": "data\\raw\\marks\\marks_illusion_of_knowledge.html",
+      "output": "data\\wisdom\\marks\\marks_illusion_of_knowledge.md",
+      "original_paragraphs": 132,
+      "selected_paragraphs": 132,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "marks_indispensability_of_risk",
+      "member": "marks",
+      "source": "data\\raw\\marks\\marks_indispensability_of_risk.html",
+      "output": "data\\wisdom\\marks\\marks_indispensability_of_risk.md",
+      "original_paragraphs": 29,
+      "selected_paragraphs": 29,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "marks_taking_the_temperature",
+      "member": "marks",
+      "source": "data\\raw\\marks\\marks_taking_the_temperature.html",
+      "output": "data\\wisdom\\marks\\marks_taking_the_temperature.md",
+      "original_paragraphs": 105,
+      "selected_paragraphs": 105,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "damodaran_growth_investing",
+      "member": "damodaran",
+      "source": "data\\raw\\damodaran\\damodaran_growth_investing.html",
+      "output": "data\\wisdom\\damodaran\\damodaran_growth_investing.md",
+      "original_paragraphs": 25,
+      "selected_paragraphs": 25,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "damodaran_intro_valuation",
+      "member": "damodaran",
+      "source": "data\\raw\\damodaran\\damodaran_intro_valuation.html",
+      "output": "data\\wisdom\\damodaran\\damodaran_intro_valuation.md",
+      "original_paragraphs": 136,
+      "selected_paragraphs": 136,
+      "source_url": "",
+      "topics": []
+    },
+    {
+      "doc_id": "damodaran_valuation_lectures",
+      "member": "damodaran",
+      "source": "data\\raw\\damodaran\\damodaran_valuation_lectures.html",
+      "output": "data\\wisdom\\damodaran\\damodaran_valuation_lectures.md",
+      "original_paragraphs": 32,
+      "selected_paragraphs": 32,
+      "source_url": "",
+      "topics": []
+    }
+  ]
+}

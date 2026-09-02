@@ -1,0 +1,15 @@
+# RAGAS(26장) 채점 전용 venv 의존성. 메인 requirements.txt와는 별도 venv에
+# 설치한다(이유: docs/how_to_use.md 9.2절/11절).
+#
+#   python -m venv .venv-ragas
+#   source .venv-ragas/Scripts/activate   (Windows Git Bash)
+#   pip install -r evaluation/requirements-ragas.txt
+#
+# ragas==0.2.15는 scikit-network에 의존하지 않는 마지막 계열이며,
+# langchain-aws==0.2.20과 짝지었을 때 langchain-community가 ragas가 기대하는
+# (아직 chat_models.vertexai 등 구 모듈 경로를 갖고 있는) 버전으로 해석되어
+# import 오류 없이 동작함을 확인했다.
+ragas==0.2.15
+langchain-aws==0.2.20
+python-dotenv==1.2.3
+datasets==5.0.1

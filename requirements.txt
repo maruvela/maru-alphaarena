@@ -1,0 +1,22 @@
+# 실제 동작을 확인한 버전으로 고정한다(REQUIREMENTS.md 32장).
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+pydantic==2.13.5
+python-dotenv==1.2.3
+langchain==1.3.18
+langchain-text-splitters==1.1.2
+langgraph==1.2.11
+langchain-aws==1.7.4
+langchain-chroma==1.1.0
+chromadb==1.5.9
+boto3==1.43.85
+pytest==9.1.1
+httpx==0.28.1
+
+# 주의: RAGAS(ragas/datasets)는 여기 포함하지 않는다. 최신 ragas(0.3+)는
+# scikit-network를 요구해 Windows/Python 3.14에서 빌드가 실패하고, 반대로
+# scikit-network가 없는 구버전 ragas(0.2.x)는 구버전 langchain-community를
+# 요구해 이 requirements.txt의 최신 langchain/langgraph 스택과 같은 venv에
+# 공존할 수 없다(langchain-community 0.4.x에서 ragas가 참조하는 구 모듈 경로가
+# 제거됨). RAGAS 평가는 evaluation/requirements-ragas.txt로 별도 venv를 만들어
+# 실행한다. 자세한 이유와 절차는 docs/how_to_use.md 9.2절/11절을 참고한다.

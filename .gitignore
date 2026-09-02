@@ -1,2 +1,22 @@
 # 원본 RAG 자료 - 로컬 수집용
 data/raw/
+
+# Secrets
+.env
+
+# Python
+.venv/
+.venv-ragas/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Claude Code local session state (도구/세션 로컬 상태, 프로젝트 소스 아님)
+.claude/
+
+# Local vector index / trace / cache
+.cache/
+logs/
+
+# Evaluation run outputs (재현 가능하므로 커밋하지 않음)
+evaluation/results/

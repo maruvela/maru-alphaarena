@@ -1,0 +1,418 @@
+{
+  "snapshot_date": "2026-08-31",
+  "currency": "USD",
+  "money_unit": "USD_billions",
+  "shares_unit": "billions",
+  "schema_version": "0.2",
+
+  "methodology": {
+    "market_data": "2026-08-31 closing price and contemporaneous valuation statistics",
+    "financials": "latest available trailing-twelve-month figures as of snapshot date",
+    "history": "last three completed fiscal years",
+    "note": "Forward P/E and WACC are market-data estimates. DCF growth and terminal-growth assumptions are intentionally not hard-coded."
+  },
+
+  "companies": {
+    "NVDA": {
+      "company_name": "NVIDIA Corporation",
+      "sector": "Technology",
+      "industry": "Semiconductors",
+      "evaluation_role": "High Growth / Growth vs Valuation",
+      "financial_period": "TTM ended 2026-07-26",
+
+      "market": {
+        "price": 220.50,
+        "market_cap": 5330.0,
+        "pe_ttm": 27.88,
+        "forward_pe": 18.28
+      },
+
+      "financials": {
+        "revenue": 302.970,
+        "revenue_growth_yoy": 0.8338,
+        "operating_income": 197.579,
+        "operating_margin": 0.6521,
+        "net_income": 192.880,
+        "free_cash_flow": 127.006,
+        "free_cash_flow_margin": 0.4192
+      },
+
+      "returns": {
+        "roe": 1.1721,
+        "roic": 0.9203
+      },
+
+      "balance_sheet": {
+        "cash_and_equivalents": 22.443,
+        "cash_and_investments": 99.369,
+        "total_debt": 38.351,
+        "net_cash": 61.018
+      },
+
+      "growth_history": {
+        "revenue": [
+          {
+            "fiscal_year": "FY2024",
+            "value": 60.922
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 130.497
+          },
+          {
+            "fiscal_year": "FY2026",
+            "value": 215.938
+          }
+        ],
+
+        "operating_income": [
+          {
+            "fiscal_year": "FY2024",
+            "value": 32.972
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 81.453
+          },
+          {
+            "fiscal_year": "FY2026",
+            "value": 130.387
+          }
+        ],
+
+        "free_cash_flow": [
+          {
+            "fiscal_year": "FY2024",
+            "value": 27.021
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 60.853
+          },
+          {
+            "fiscal_year": "FY2026",
+            "value": 96.676
+          }
+        ]
+      },
+
+      "valuation_inputs": {
+        "base_fcf": 127.006,
+        "shares_outstanding": 24.15,
+        "net_debt": -61.018,
+        "reference_wacc": 0.1632,
+        "default_growth_rate": null,
+        "default_discount_rate": null,
+        "default_terminal_growth_rate": null
+      },
+
+      "business_context": {
+        "description": "Accelerated-computing and AI infrastructure company; Data Center is the dominant current growth engine.",
+
+        "growth_drivers": [
+          "AI infrastructure buildout and accelerating data-center demand",
+          "Vera Rubin production ramp and hyperscale deployment",
+          "Expansion of AI workloads including physical AI"
+        ],
+
+        "key_risks": [
+          "Supply is expected to remain a bottleneck through at least FY2028",
+          "Memory scarcity and component pricing are pressuring gross-margin expectations",
+          "Geopolitical uncertainty; forward outlook excludes China data-center compute revenue"
+        ]
+      },
+
+      "sources": [
+        {
+          "source_id": "nvda_q2_fy2027_official",
+          "type": "company_ir",
+          "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
+          "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+          "as_of": "2026-08-26"
+        },
+        {
+          "source_id": "nvda_q2_fy2027_10q",
+          "type": "10-Q",
+          "title": "NVIDIA Q2 FY2027 Form 10-Q",
+          "url": "https://investor.nvidia.com/files/doc_financials/2027/NVDA-2027-Q2-10Q-Final-including-exhibits.pdf",
+          "as_of": "2026-07-26"
+        },
+        {
+          "source_id": "nvda_market_snapshot",
+          "type": "market_data_secondary",
+          "title": "StockAnalysis NVDA",
+          "url": "https://stockanalysis.com/stocks/nvda/",
+          "as_of": "2026-08-31"
+        }
+      ]
+    },
+
+    "COST": {
+      "company_name": "Costco Wholesale Corporation",
+      "sector": "Consumer Staples",
+      "industry": "Discount Stores / Membership Retail",
+      "evaluation_role": "High Quality / Quality vs Valuation Premium",
+      "financial_period": "TTM through fiscal Q3 ended 2026-05-10",
+
+      "market": {
+        "price": 943.88,
+        "market_cap": 418.60,
+        "pe_ttm": 47.48,
+        "forward_pe": 43.07
+      },
+
+      "financials": {
+        "revenue": 293.587,
+        "revenue_growth_yoy": 0.0923,
+        "operating_income": 11.225,
+        "operating_margin": 0.0382,
+        "net_income": 8.838,
+        "free_cash_flow": 8.806,
+        "free_cash_flow_margin": 0.0300
+      },
+
+      "returns": {
+        "roe": 0.2915,
+        "roic": 0.3844
+      },
+
+      "balance_sheet": {
+        "cash_and_equivalents": 18.946,
+        "cash_and_investments": 19.996,
+        "total_debt": 8.232,
+        "net_cash": 11.764
+      },
+
+      "growth_history": {
+        "revenue": [
+          {
+            "fiscal_year": "FY2023",
+            "value": 242.290
+          },
+          {
+            "fiscal_year": "FY2024",
+            "value": 254.453
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 275.235
+          }
+        ],
+
+        "operating_income": [
+          {
+            "fiscal_year": "FY2023",
+            "value": 8.505
+          },
+          {
+            "fiscal_year": "FY2024",
+            "value": 9.285
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 10.383
+          }
+        ],
+
+        "free_cash_flow": [
+          {
+            "fiscal_year": "FY2023",
+            "value": 6.745
+          },
+          {
+            "fiscal_year": "FY2024",
+            "value": 6.629
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 7.837
+          }
+        ]
+      },
+
+      "valuation_inputs": {
+        "base_fcf": 8.806,
+        "shares_outstanding": 0.44348,
+        "net_debt": -11.764,
+        "reference_wacc": 0.0883,
+        "default_growth_rate": null,
+        "default_discount_rate": null,
+        "default_terminal_growth_rate": null
+      },
+
+      "business_context": {
+        "description": "Membership-warehouse retailer with a global warehouse network and growing digitally-enabled sales.",
+
+        "growth_drivers": [
+          "Third-quarter fiscal 2026 net sales increased 11.6% year over year",
+          "Digitally-enabled comparable sales remained above 20% growth in the latest reported quarter",
+          "Global membership-warehouse model and continued comparable-sales growth"
+        ],
+
+        "key_risks": [
+          "Competition, regulation, inflation/deflation and foreign-exchange movements",
+          "Changes in consumer and small-business spending patterns",
+          "Vendor, labor-cost, energy/commodity and geopolitical/tariff risks"
+        ]
+      },
+
+      "sources": [
+        {
+          "source_id": "cost_q3_fy2026_official",
+          "type": "company_ir",
+          "title": "Costco Reports Third Quarter and Year-To-Date Operating Results for Fiscal 2026",
+          "url": "https://investor.costco.com/news/news-details/2026/Costco-Wholesale-Corporation-Reports-Third-Quarter-and-Year-To-Date-Operating-Results-For-Fiscal-2026/default.aspx",
+          "as_of": "2026-05-28"
+        },
+        {
+          "source_id": "cost_2026_q3_10q",
+          "type": "10-Q",
+          "title": "Costco Form 10-Q filed June 3, 2026",
+          "url": "https://investor.costco.com/financials/sec-filings/default.aspx?page=1",
+          "as_of": "2026-06-03"
+        },
+        {
+          "source_id": "cost_market_snapshot",
+          "type": "market_data_secondary",
+          "title": "StockAnalysis COST",
+          "url": "https://stockanalysis.com/stocks/cost/",
+          "as_of": "2026-08-31"
+        }
+      ]
+    },
+
+    "INTC": {
+      "company_name": "Intel Corporation",
+      "sector": "Technology",
+      "industry": "Semiconductors",
+      "evaluation_role": "Turnaround / Recovery vs Downside Risk",
+      "financial_period": "TTM ended 2026-06-30",
+
+      "market": {
+        "price": 89.51,
+        "market_cap": 470.33,
+        "pe_ttm": null,
+        "forward_pe": 53.88
+      },
+
+      "financials": {
+        "revenue": 57.032,
+        "revenue_growth_yoy": 0.0747,
+        "operating_income": 4.461,
+        "operating_margin": 0.0782,
+        "net_income": -11.289,
+        "free_cash_flow": 2.831,
+        "free_cash_flow_margin": 0.0496
+      },
+
+      "returns": {
+        "roe": -0.1072,
+        "roic": 0.0342
+      },
+
+      "balance_sheet": {
+        "cash_and_equivalents": 12.874,
+        "cash_and_investments": 29.977,
+        "total_debt": 50.537,
+        "net_cash": -20.560
+      },
+
+      "growth_history": {
+        "revenue": [
+          {
+            "fiscal_year": "FY2023",
+            "value": 54.228
+          },
+          {
+            "fiscal_year": "FY2024",
+            "value": 53.101
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 52.853
+          }
+        ],
+
+        "operating_income": [
+          {
+            "fiscal_year": "FY2023",
+            "value": 0.031
+          },
+          {
+            "fiscal_year": "FY2024",
+            "value": -1.408
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": 0.927
+          }
+        ],
+
+        "free_cash_flow": [
+          {
+            "fiscal_year": "FY2023",
+            "value": -14.279
+          },
+          {
+            "fiscal_year": "FY2024",
+            "value": -15.656
+          },
+          {
+            "fiscal_year": "FY2025",
+            "value": -4.949
+          }
+        ]
+      },
+
+      "valuation_inputs": {
+        "base_fcf": 2.831,
+        "shares_outstanding": 5.25,
+        "net_debt": 20.560,
+        "reference_wacc": 0.1514,
+        "default_growth_rate": null,
+        "default_discount_rate": null,
+        "default_terminal_growth_rate": null
+      },
+
+      "business_context": {
+        "description": "Integrated semiconductor company spanning client computing, data center and AI, and Intel Foundry.",
+
+        "growth_drivers": [
+          "AI-driven compute demand and stronger Data Center and AI activity",
+          "Xeon 6+ and Intel 18A product/process momentum",
+          "Potential growth from products plus external foundry customers"
+        ],
+
+        "key_risks": [
+          "High competition and rapid technological change across CPUs, GPUs, accelerators and foundry",
+          "Capital-intensive R&D and manufacturing investments may not earn adequate returns",
+          "Intel 14A and future leading-edge foundry strategy depends on securing significant external customers"
+        ]
+      },
+
+      "sources": [
+        {
+          "source_id": "intc_q2_2026_official",
+          "type": "company_ir",
+          "title": "Intel Reports Second-Quarter 2026 Financial Results",
+          "url": "https://www.intc.com/news-events/press-releases/detail/1776/intel-reports-second-quarter-2026-financial-results",
+          "as_of": "2026-07-23"
+        },
+        {
+          "source_id": "intc_2025_10k",
+          "type": "10-K",
+          "title": "Intel 2025 Form 10-K",
+          "url": "https://www.intc.com/filings-reports/all-sec-filings/content/0000050863-26-000011/intc-20251227.htm",
+          "as_of": "2025-12-27"
+        },
+        {
+          "source_id": "intc_market_snapshot",
+          "type": "market_data_secondary",
+          "title": "StockAnalysis INTC",
+          "url": "https://stockanalysis.com/stocks/intc/",
+          "as_of": "2026-08-31"
+        }
+      ]
+    }
+  }
+}
