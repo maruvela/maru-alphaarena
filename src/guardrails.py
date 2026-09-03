@@ -174,6 +174,24 @@ _FORBIDDEN_EXPRESSIONS = [
     "guaranteed return",
 ]
 
+# 한국어 부정 접두어. "확실한 수익"이 "불확실한 수익성"(정반대 의미의 정상적
+# 위험 서술) 안에서 오매칭되는 것을 방지하기 위해, 금지 문구 바로 앞에 이
+# 접두어 중 하나가 붙어 있으면 매칭에서 제외한다(round1_report.md 근본원인
+# A — 실제 INTC 분석이 이 오탐으로 통째로 Fallback 처리된 사례로 발견됨).
+_NEGATION_PREFIX_CHARS = "불무안못"
+
+
+def _compile_forbidden_pattern(phrase: str) -> re.Pattern[str]:
+    escaped = re.escape(phrase.lower())
+    if re.search(r"[가-힣]", phrase):
+        return re.compile(rf"(?<![{_NEGATION_PREFIX_CHARS}]){escaped}")
+    return re.compile(escaped)
+
+
+_FORBIDDEN_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    (phrase, _compile_forbidden_pattern(phrase)) for phrase in _FORBIDDEN_EXPRESSIONS
+]
+
 _SECRET_LEAK_PATTERNS = [
     r"AKIA[0-9A-Z]{16}",
     r"aws_secret_access_key",
@@ -196,8 +214,8 @@ def check_output(answer: str) -> GuardrailResult:
 
     lowered = answer.lower()
 
-    for phrase in _FORBIDDEN_EXPRESSIONS:
-        if phrase.lower() in lowered:
+    for phrase, pattern in _FORBIDDEN_PATTERNS:
+        if pattern.search(lowered):
             return GuardrailResult(
                 allowed=False,
                 reason_code="forbidden_expression",
@@ -212,6 +230,33 @@ def check_output(answer: str) -> GuardrailResult:
         )
 
     return GuardrailResult(allowed=True, reason_code="ok")
+
+
+def describe_output_violation(answer: str, reason_code: str) -> str:
+    """Output Guardrail Correction(agent.py `_correct_output`)에 넘길 상세
+    사유 문자열을 만든다.
+
+    `GuardrailResult.user_message`는 REQUIREMENTS.md 11.2 계약상 "사용자에게
+    그대로 노출해도 안전한 문구"여야 하므로 원본 답변의 문맥을 담을 수 없다.
+    반면 Correction 모델은 `reason_code`만으로는 정확히 어떤 문자열을 고쳐야
+    하는지 알 수 없어(round1_report.md 근본원인 A) 1회 한정 Retry가 사실상
+    무력화되는 사례가 있었다 — 이 함수는 그 문제를 좁히기 위해 실제로
+    매칭된 문구와 주변 문맥을 Correction Prompt 전용으로 별도 제공한다.
+    """
+
+    if reason_code == "forbidden_expression":
+        lowered = answer.lower()
+        for phrase, pattern in _FORBIDDEN_PATTERNS:
+            match = pattern.search(lowered)
+            if match:
+                start, end = match.span()
+                context = answer[max(0, start - 60) : end + 60]
+                return (
+                    f"forbidden_expression: 금지 문구 '{phrase}'가 다음 문맥에서 감지됨: "
+                    f"...{context}..."
+                )
+
+    return reason_code
 
 
 # ---------------------------------------------------------------------------

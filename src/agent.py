@@ -399,8 +399,17 @@ def build_safe_trace(state: AlphaArenaState, final_answer: str | None) -> list[A
         )
 
     if final_answer:
-        check = guardrails.check_output(final_answer)
-        trace.append(ApiTrace(step="output_guardrail", input="final answer", output=f"allowed={check.allowed}"))
+        # node_render_answer가 실제로 계산한 처리 결과(원본 통과 / Correction
+        # 후 통과 / Fallback 대체)를 그대로 쓴다. 여기서 다시 check_output()을
+        # final_answer(Correction/Fallback으로 이미 대체됐을 수 있는 최종
+        # 문자열)에 돌리면 대체된 "안전한" 텍스트만 검사하게 되어 항상
+        # allowed=True로 보여 원본이 실패했었다는 사실을 감춘다(round1_report.md
+        # 근본원인 A) — Early-exit 경로처럼 render_answer가 아예 실행되지 않아
+        # status가 없을 때만 예외적으로 다시 계산한다.
+        status = state.get("output_guardrail_status")
+        if status is None:
+            status = f"allowed={guardrails.check_output(final_answer).allowed}"
+        trace.append(ApiTrace(step="output_guardrail", input="final answer", output=status))
 
     return trace
 
@@ -783,11 +792,14 @@ def node_render_answer(state: AlphaArenaState) -> dict:
         check = guardrails.check_output(draft)
         if check.allowed:
             final_answer = draft
+            status = "allowed=True"
             t.output_summary = "ok"
         else:
-            corrected = _correct_output(draft, check.reason_code)
+            detail = guardrails.describe_output_violation(draft, check.reason_code)
+            corrected = _correct_output(draft, detail)
             check2 = guardrails.check_output(corrected)
             final_answer = corrected if check2.allowed else guardrails.SAFE_FALLBACK_MESSAGE
+            status = f"allowed=False, corrected reason={check.reason_code} final_ok={check2.allowed}"
             t.output_summary = f"corrected reason={check.reason_code} final_ok={check2.allowed}"
 
     # t.duration_ms는 with-block의 finally에서 채워지므로 블록이 끝난 뒤(여기)
@@ -804,7 +816,7 @@ def node_render_answer(state: AlphaArenaState) -> dict:
             t.duration_ms,
         )
 
-    return {"answer": final_answer}
+    return {"answer": final_answer, "output_guardrail_status": status}
 
 
 def node_finalize(state: AlphaArenaState) -> dict:

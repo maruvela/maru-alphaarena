@@ -1444,7 +1444,7 @@ Evaluation Runner는 전체 Test Set을 실행하고 Machine-readable 결과와 
 
 ```text
 evaluation/run_evaluation.py
-evaluation/results/
+evaluation/runs/<run_id>/
 ```
 
 각 Test Case에 최소 다음 정보를 기록한다.
@@ -1476,6 +1476,64 @@ ERROR
 ```
 
 Provider Exception 또는 Runtime Exception은 `FAIL`로 가장하지 말고 `ERROR`로 기록한다.
+
+## 24.1 Full Evaluation Run 보존 정책
+
+모든 Full Evaluation 실행(Round 1/Round 2/재시도 포함)은 독립적인 **Run**으로
+취급하며, 기존 Run의 결과를 절대 덮어쓰거나 삭제하지 않고 영구 보존한다.
+
+**run_id 규칙**: `YYYYMMDD_HHMMSS_<round-name>` 형태의 Timestamp 기반 고유
+식별자를 사용한다.
+
+```text
+20260902_163000_round1
+20260902_190000_round2
+20260902_200000_round2_retry01
+```
+
+- 같은 코드/설정으로 실행했으나 Quota/Timeout 등 **인프라 문제**로 재실행하는
+  경우 새로운 Round로 부르지 않고 `_retry01`, `_retry02`처럼 재시도 번호를
+  붙인다.
+- Round 1 결과를 분석한 뒤 Prompt/Code/RAG 설정 등을 **실제로 개선**해서
+  다시 평가하는 경우에만 Round 번호를 올린다(Round 2, Round 3, ...).
+- 이미 존재하는 `run_id` 디렉터리에는 절대 다시 쓰지 않는다(실행 전 존재
+  여부를 확인하고, 존재하면 실행을 거부한다).
+
+**저장 위치**: `evaluation/runs/<run_id>/` 아래에 해당 실행의 모든 결과를
+저장한다. 필수 저장 항목:
+
+```text
+run_manifest.json
+summary.json
+results.json
+evaluation.log
+judge_results.json
+cases/<case_id>.md
+```
+
+각 `cases/<case_id>.md`에는 최소 다음을 보존한다: id, category, input,
+expected_traits, forbidden, expected_tools, 실제 전체 answer, 실제 contexts,
+실제 Safe Trace, Judge PASS/FAIL/ERROR, Judge reason, 실제 사용 Tool 판정
+정보(있는 경우), 소요 시간(duration), 오류 발생 시 error type과 안전하게
+정제된 메시지.
+
+`run_manifest.json`에는 최소 다음을 기록한다: run_id, round, started_at,
+finished_at, status(valid/invalid), git commit hash, test dataset 경로, test
+case 수, model, judge model, 주요 model parameter(temperature/max_tokens/
+rag_top_k 등), company snapshot 경로, PASS/FAIL/ERROR 수, pass rate, invalid
+사유(있는 경우).
+
+**INVALID 처리**: Full Evaluation이 Quota 초과, Timeout 등 인프라 문제로
+정상 완료되지 않으면(예: 다수 Case가 ThrottlingException/ReadTimeout 등으로
+ERROR가 되거나, 실행이 중간에 중단됨) 결과를 삭제하지 않고
+`run_manifest.json`에 `status: "invalid"`와 사유를 기록해 보존한다. INVALID로
+표시된 Run은 Round 간 성능 비교(27장 Round Report)에 사용하지 않는다 —
+유효한(valid) Run끼리만 비교한다.
+
+**자동 진행 금지**: Evaluation Runner는 한 Round(또는 Retry)를 실행하고
+나면 자동으로 다음 Round를 이어서 실행하지 않는다. Round 1 완료 후에는
+사용자가 실제 결과를 직접 검토할 때까지 멈추고, 코드/Prompt 개선이나 Round 2
+실행은 그 검토 이후 별도로 진행한다.
 
 ---
 

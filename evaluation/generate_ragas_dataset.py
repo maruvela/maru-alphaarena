@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_PATH = ROOT / "evaluation" / "ragas_reference.csv"
 TEST_QUERIES_PATH = ROOT / "evaluation" / "test_queries.csv"
 DATASET_PATH = ROOT / "evaluation" / "results" / "ragas_dataset.json"
+SKIPPED_PATH = ROOT / "evaluation" / "results" / "ragas_dataset_skipped.json"
 
 
 def _load_questions() -> dict[str, str]:
@@ -44,6 +45,7 @@ def _load_reference() -> list[dict]:
 def main() -> None:
     questions_by_id = _load_questions()
     rows = []
+    skipped = []
 
     for ref in _load_reference():
         case_id = ref["id"]
@@ -52,7 +54,17 @@ def main() -> None:
             raise ValueError(f"test_queries.csv에서 id={case_id}를 찾지 못했습니다.")
 
         print(f"[{case_id}] 실행 중: {question}")
-        final_state = run_query(question)
+        try:
+            final_state = run_query(question)
+        except Exception as exc:  # noqa: BLE001 - 한 Case의 Provider/Runtime 실패가
+            # 전체 Dataset 생성을 중단시키면 안 된다(run_evaluation.py의 ERROR
+            # 처리와 동일한 원칙). 실패한 Case는 RAGAS 대상에서 제외하고 사유를
+            # 별도로 남겨, 나머지 Case는 그대로 채점할 수 있게 한다.
+            reason = f"{type(exc).__name__}: {exc}"
+            skipped.append({"id": case_id, "question": question, "reason": reason})
+            print(f"[{case_id}] 건너뜀 (run_query 실패): {type(exc).__name__}")
+            continue
+
         contexts = [c.text for c in (final_state.get("contexts") or [])]
 
         rows.append(
@@ -68,7 +80,13 @@ def main() -> None:
 
     DATASET_PATH.parent.mkdir(parents=True, exist_ok=True)
     DATASET_PATH.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\n완료: {DATASET_PATH} ({len(rows)}건)")
+    SKIPPED_PATH.write_text(json.dumps(skipped, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    print(f"\n완료: {DATASET_PATH} ({len(rows)}건 수집, {len(skipped)}건 건너뜀)")
+    if skipped:
+        print(f"건너뛴 Case 상세: {SKIPPED_PATH}")
+        for s in skipped:
+            print(f"  - {s['id']}: {s['reason'][:200]}")
     print("다음 단계: 별도 RAGAS venv에서 `python -m evaluation.score_ragas_dataset` 실행")
 
 

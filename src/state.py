@@ -59,3 +59,9 @@ class AlphaArenaState(TypedDict, total=False):
     safe_trace: list[ApiTrace]
     answer: str | None
     error: str | None
+
+    # node_render_answer가 Output Guardrail의 실제 처리 결과(원본 통과 /
+    # Correction 후 통과 / Fallback 대체)를 기록한다. build_safe_trace가 이
+    # 값을 그대로 옮겨 써서, 이미 대체된 answer를 다시 검사해 원본의 실패를
+    # 감추는 일을 방지한다(REQUIREMENTS.md 계약 외부의 내부 전용 필드).
+    output_guardrail_status: str | None

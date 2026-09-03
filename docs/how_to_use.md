@@ -390,14 +390,64 @@ Bedrock Titan으로 임베딩) 이후 호출보다 훨씬 오래 걸릴 수 있�
 ### 9.1 Input-Output Evaluation + LLM-as-Judge
 
 ```powershell
-python -m evaluation.run_evaluation
+python -m evaluation.run_evaluation --round round1
 ```
 
+`--round`는 **필수**이며 `roundN` 또는 `roundN_retryNN` 형식만 허용한다(예:
+`round1`, `round2`, `round2_retry01`). 형식이 다르면 실행 자체가 거부된다.
+
 `evaluation/test_queries.csv`의 20건을 모두 실행하고, 각 Case에
-LLM-as-Judge(`JUDGE_PROMPT`, Temperature 0)를 적용한다. 결과는
-`evaluation/results/run_<timestamp>.json`(기계 판독용)과
-`evaluation/results/run_<timestamp>.md`(사람 판독용 요약)로 저장된다. 콘솔에도
-전체/Category별 Pass Rate 요약이 출력된다.
+LLM-as-Judge(`JUDGE_PROMPT`, Temperature 0)를 적용한다. 콘솔에도
+Case별 진행 상황과 전체 Pass Rate가 실시간으로 출력된다.
+
+**Run 저장 구조 (REQUIREMENTS.md 24.1장)**
+
+매 실행은 독립적인 "Run"으로 취급되어 다음 위치에 보존되며, **과거 Run
+결과는 절대 덮어쓰지 않는다** (동일한 run_id 디렉터리가 이미 있으면 실행이
+즉시 실패한다):
+
+```
+evaluation/runs/<run_id>/
+├── run_manifest.json    # run_id, round, 시작/종료 시각, git commit,
+│                         # 모델/Judge 모델/주요 파라미터, PASS/FAIL/ERROR 집계,
+│                         # Pass Rate, status(valid/invalid), invalid_reason
+├── summary.json          # Category별 집계
+├── results.json           # 20건 전체의 원본 결과(요약이 아닌 실제 값)
+├── judge_results.json    # Case별 Judge pass/score/reasons만 모은 목록
+├── evaluation.log         # 이 Run의 실행 로그(콘솔에 출력된 것과 동일)
+└── cases/
+    ├── P01.md            # Case별 상세 문서(아래 참고)
+    ├── ...
+    └── G03.md
+```
+
+`run_id`는 `YYYYMMDD_HHMMSS_<round-name>` 형식으로 실행 시각에 자동
+생성된다(예: `20260902_163000_round1`).
+
+**`cases/<case_id>.md`에 포함되는 정보** — id/category/input,
+expected_traits/forbidden/expected_tools(선언값과 실제 판정), 실제 answer
+전문, 실제로 사용된 Context 전체(doc_id/member/title/본문), 실제 Safe
+Trace, Judge PASS/FAIL/ERROR 결과와 reasons, 소요 시간(duration_ms), (ERROR인
+경우) 정제된 error_type/message. **Round 1을 직접 검토할 때는 이 폴더의 20개
+파일을 하나씩 읽는 것이 가장 정확하다** — `results.json`은 기계 판독용
+원본이고, `cases/*.md`는 그 값을 사람이 읽기 좋은 형태로 그대로 옮긴 것이다.
+
+**INVALID Run 이란** — Bedrock Quota 초과, Timeout 등 "코드가 아니라
+인프라가 원인"인 실패가 감지되거나, 실행이 중간에 중단되어 예정된 20건을 다
+채우지 못한 경우 `run_manifest.json`의 `status`가 `"invalid"`로 기록된다.
+INVALID Run도 삭제하지 않고 그대로 보존하지만, **Round 간 비교에는 `status:
+"valid"`인 Run만 사용한다.**
+
+**Retry vs Round** — 같은 코드/설정으로 인프라 문제 때문에 다시 실행할
+때는 Round 번호를 올리지 않고 `_retryNN`을 붙인다(예: `round1_retry01`).
+Prompt/Code/RAG를 실제로 개선했을 때만 Round 번호를 올린다(예: `round2`).
+이 구분은 `run_id`만 보고도 알 수 있어야 하므로, Runner가 `--round` 값의
+형식을 강제로 검증한다.
+
+**자동 진행 금지** — Runner는 한 Round(또는 Retry)를 실행하고 나면 그
+자리에서 멈춘다. 결과를 보고 다음 Round를 실행할지, 어떤 코드를 고칠지는
+항상 사람이 검토 후 별도로 결정한다 — 실패했다고 자동으로 재시도하거나,
+성공했다고 자동으로 다음 Round를 실행하지 않는다.
 
 ### 9.2 RAGAS
 
@@ -437,10 +487,13 @@ import하지 않으므로(무거운 런타임 의존성 회피) 별도 venv에�
 
 ### 9.3 Round 1 / Round 2 Report 확인
 
-측정 결과를 [evaluation/round1_report.md](../evaluation/round1_report.md),
+`evaluation/runs/<run_id>/summary.json` / `run_manifest.json`의 수치를
+[evaluation/round1_report.md](../evaluation/round1_report.md),
 [evaluation/round2_report.md](../evaluation/round2_report.md)에 옮겨 적는다.
 Round 1과 Round 2는 반드시 동일한 Judge Model/Prompt/Temperature/Test
-Dataset으로 실행해야 비교가 유효하다(21장, 25장).
+Dataset으로 실행해야 비교가 유효하며(21장, 25장), **비교 대상 Run은 반드시
+`status: "valid"`여야 한다** — `"invalid"` Run은 인프라 실패로 결과가
+왜곡되어 있으므로 Round 비교에 사용하지 않는다(24.1장).
 
 ## 10. 터미널에서 실행 로그 확인
 

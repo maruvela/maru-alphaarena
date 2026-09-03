@@ -63,3 +63,38 @@ def test_output_secret_leak_blocked():
 def test_output_normal_answer_allowed():
     result = check_output("이 기업은 성장 가능성이 있으나 밸류에이션 부담이 존재합니다.")
     assert result.allowed is True
+
+
+def test_output_negated_uncertain_profitability_not_falsely_blocked():
+    """round1_report.md 근본원인 A: '확실한 수익'이 '불확실한 수익성'(정반대
+    의미의 정상적 위험 서술) 안에서 오매칭되어, INTC avoid 분석 전체가
+    Fallback으로 대체된 실제 Round 1 재현 사례. 이 부정 접두어 형태는
+    반드시 허용되어야 한다."""
+
+    result = check_output(
+        "자본 집약적 R&D·제조 투자의 불확실한 수익성이 자본 영구 훼손의 실질적 위험을 구성한다."
+    )
+    assert result.allowed is True
+
+
+def test_output_actual_guaranteed_profit_claim_still_blocked_after_fix():
+    """오탐 수정이 진짜 위반 탐지 능력을 훼손하지 않는지 확인한다."""
+
+    result = check_output("이 종목은 확실한 수익을 보장합니다.")
+    assert result.allowed is False
+    assert result.reason_code == "forbidden_expression"
+
+
+def test_describe_output_violation_includes_matched_phrase_and_context():
+    from src.guardrails import describe_output_violation
+
+    answer = "이 전략은 확실한 수익을 약속하며 손실 위험이 전혀 없습니다."
+    detail = describe_output_violation(answer, "forbidden_expression")
+    assert "확실한 수익" in detail
+    assert "약속하며" in detail  # 매칭 지점 주변 문맥이 포함되어야 한다
+
+
+def test_describe_output_violation_passthrough_for_non_forbidden_reason():
+    from src.guardrails import describe_output_violation
+
+    assert describe_output_violation("아무 텍스트", "secret_leak") == "secret_leak"

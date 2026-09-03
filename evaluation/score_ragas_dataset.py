@@ -85,6 +85,14 @@ def main() -> None:
     llm = LangchainLLMWrapper(
         ChatBedrock(
             model_id=settings.bedrock_model_id,
+            # langchain-aws==0.2.20의 provider 자동 추출은 region prefix로
+            # "eu"/"us"/"us-gov"/"apac"/"sa"만 인식한다. 최근 Cross-region
+            # Inference Profile에서 쓰이는 "global." prefix(예:
+            # global.anthropic.claude-haiku-4-5-...)는 이 목록에 없어 "global"
+            # 자체를 provider로 오인해 `NotImplementedError(Provider global
+            # model does not support chat.)`를 던진다. provider를 명시해
+            # 이 버그성 자동 추출 로직을 건너뛴다.
+            provider="anthropic",
             region_name=settings.aws_region,
             # faithfulness의 Claim 분해/검증 단계는 답변이 길수록 매우 verbose한
             # JSON(문장마다 statement/reason/verdict)을 생성해야 해서 메인 앱의

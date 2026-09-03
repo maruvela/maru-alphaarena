@@ -18,5 +18,10 @@ __pycache__/
 .cache/
 logs/
 
-# Evaluation run outputs (재현 가능하므로 커밋하지 않음)
+# Evaluation outputs (재현 가능하므로 커밋하지 않음)
+# evaluation/runs/<run_id>/ 는 24.1장에 따라 영구 보존 대상이지만, 이는
+# "삭제/덮어쓰기 금지"를 의미할 뿐 Git 추적 대상이라는 뜻은 아니다 — 각 Run은
+# 실제 답변 전문/RAG Context 등 부피가 큰 산출물을 담으므로 results/와 동일하게
+# 로컬 파일시스템에 보존하고 Git에는 커밋하지 않는다.
 evaluation/results/
+evaluation/runs/

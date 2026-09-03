@@ -226,6 +226,11 @@ CHAIR_PROMPT = f"""\
 - 기업의 질(Business Quality)과 현재 가격에서의 투자 매력(Price/Value)을 분리해서 평가한다.
 - Context에 존재하지 않는 기업 Fact를 생성하지 않는다.
 - 수익을 보장하는 표현을 사용하지 않는다.
+- bull_case/bear_case/decisive_factors/conditions_to_revisit에서 향후 성장률·마진 등 \
+구체적 수치를 언급할 때, 그 수치가 Company Context Snapshot에 실제로 존재하는 값이 \
+아니라면 반드시 "~라고 가정하면", "~를 조건으로", "~할 경우"처럼 명시적 가정/조건 \
+표현을 함께 쓴다. 확인되지 않은 미래 수치를 가정 표시 없이 사실이나 예측처럼 \
+단정적으로 서술하지 않는다.
 
 {RETRIEVED_CONTENT_POLICY}
 
